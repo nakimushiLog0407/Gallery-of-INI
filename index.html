@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>INI Supply Archive</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+</head>
+
+<body>
+
+  <main class="app">
+
+    <!-- =========================
+         CALENDAR画面
+    ========================== -->
+
+    <div id="calendarView">
+
+      <header class="app-header">
+        <h1>INI SUPPLY ARCHIVE</h1>
+      </header>
+
+      <section class="calendar-section">
+
+        <div class="calendar-header">
+
+          <button
+            id="prevMonth"
+            type="button"
+            aria-label="前の月"
+          >
+            ‹
+          </button>
+
+          <button
+            id="monthPickerButton"
+            class="month-picker-button"
+            type="button"
+            aria-label="年月を選択"
+          >
+            <span id="currentMonth"></span>
+          </button>
+
+          <button
+            id="nextMonth"
+            type="button"
+            aria-label="次の月"
+          >
+            ›
+          </button>
+
+        </div>
+
+
+        <div class="weekdays">
+          <div>月</div>
+          <div>火</div>
+          <div>水</div>
+          <div>木</div>
+          <div>金</div>
+          <div>土</div>
+          <div>日</div>
+        </div>
+
+
+        <div
+          id="calendar"
+          class="calendar-grid"
+        ></div>
+
+
+        <div class="calendar-legend">
+
+          <div class="calendar-legend-item">
+
+            <span
+              class="dot youtube-dot"
+            ></span>
+
+            <span>YouTube</span>
+
+          </div>
+
+
+          <div class="calendar-legend-item">
+
+            <span
+              class="dot fc-dot"
+            ></span>
+
+            <span>FC Contents</span>
+
+          </div>
+
+
+          <div class="calendar-legend-item">
+
+            <span
+              class="dot schedule-dot"
+            ></span>
+
+            <span>Schedule</span>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section class="supplies-section">
+
+        <h2 id="selectedDate">
+          日付を選択してください
+        </h2>
+
+        <div id="supplyList"></div>
+
+      </section>
+
+    </div>
+
+
+    <!-- =========================
+         EXPLORE画面
+    ========================== -->
+
+    <div
+      id="exploreView"
+      hidden
+    >
+
+      <header class="app-header">
+        <h1>EXPLORE</h1>
+      </header>
+
+
+      <section class="explore-section">
+
+        <div class="explore-search">
+
+          <span
+            class="explore-search-icon"
+            aria-hidden="true"
+          >
+            ⌕
+          </span>
+
+          <input
+            id="exploreSearchInput"
+            class="explore-search-input"
+            type="search"
+            placeholder="タイトル・メンバー名で検索"
+            autocomplete="off"
+            aria-label="供給を検索"
+          >
+
+        </div>
+
+
+        <div class="explore-filter">
+
+          <span class="explore-filter-label">
+            カテゴリ
+          </span>
+
+
+          <button
+            id="exploreCategoryButton"
+            class="explore-category-button"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="categorySheet"
+            aria-expanded="false"
+          >
+
+            <span
+              id="exploreCategoryLabel"
+              class="explore-category-label"
+            >
+              すべて
+            </span>
+
+            <span
+              class="explore-category-arrow"
+              aria-hidden="true"
+            >
+              ›
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <div class="explore-result-header">
+
+          <span id="exploreResultLabel">
+            ALL
+          </span>
+
+          <span id="exploreResultCount"></span>
+
+        </div>
+
+
+        <div id="exploreList"></div>
+
+
+        <button
+          id="exploreLoadMore"
+          class="explore-load-more"
+          type="button"
+          hidden
+        >
+          さらに表示
+        </button>
+
+      </section>
+
+    </div>
+
+
+    <!-- =========================
+         DETAIL画面
+    ========================== -->
+
+    <div
+      id="detailView"
+      class="detail-view"
+      hidden
+    >
+
+      <header class="detail-header">
+
+        <button
+          id="detailBackButton"
+          class="detail-back-button"
+          type="button"
+          aria-label="前の画面に戻る"
+        >
+          ‹
+        </button>
+
+        <span>DETAIL</span>
+
+        <div class="detail-header-space"></div>
+
+      </header>
+
+
+      <section class="detail-content">
+
+        <div
+          id="detailThumbnailWrapper"
+          class="detail-thumbnail-wrapper"
+        >
+
+          <img
+            id="detailThumbnail"
+            class="detail-thumbnail"
+            src=""
+            alt=""
+          >
+
+        </div>
+
+
+        <div
+          id="detailType"
+          class="detail-type"
+        ></div>
+
+
+        <h1
+          id="detailTitle"
+          class="detail-title"
+        ></h1>
+
+
+        <p
+          id="detailDate"
+          class="detail-date"
+        ></p>
+
+
+        <p
+          id="detailMember"
+          class="detail-member"
+          hidden
+        ></p>
+
+
+        <!-- =========================
+             Schedule 出演メンバー
+        ========================== -->
+
+        <div
+          id="detailScheduleMembers"
+          class="detail-schedule-members"
+          hidden
+        >
+
+          <div class="detail-section-label">
+            出演メンバー
+          </div>
+
+          <div
+            id="detailScheduleMembersText"
+            class="detail-schedule-members-text"
+          ></div>
+
+        </div>
+
+
+        <!-- =========================
+             Schedule 詳細本文
+        ========================== -->
+
+        <div
+          id="detailScheduleText"
+          class="detail-schedule-text"
+          hidden
+        ></div>
+
+
+        <!-- =========================
+             Schedule X POSTS
+        ========================== -->
+
+        <div
+          id="detailScheduleXPosts"
+          class="detail-schedule-x-posts"
+          hidden
+        >
+
+          <div class="detail-section-label">
+            X POSTS
+          </div>
+
+          <div
+            id="detailScheduleXPostsList"
+            class="detail-schedule-x-posts-list"
+          ></div>
+
+        </div>
+
+
+        <!-- =========================
+             Schedule 関連リンク
+        ========================== -->
+
+        <div
+          id="detailScheduleLinks"
+          class="detail-schedule-links"
+          hidden
+        >
+
+          <div class="detail-section-label">
+            関連リンク
+          </div>
+
+          <div
+            id="detailScheduleLinksList"
+            class="detail-schedule-links-list"
+          ></div>
+
+        </div>
+
+
+        <a
+          id="detailExternalLink"
+          class="detail-external-link"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <span id="detailExternalLinkText">
+            外部サイトで見る
+          </span>
+
+          <span aria-hidden="true">
+            ↗
+          </span>
+
+        </a>
+
+      </section>
+
+    </div>
+
+
+    <!-- =========================
+         年月選択
+    ========================== -->
+
+    <div
+      id="monthPicker"
+      class="month-picker-overlay"
+      hidden
+    >
+
+      <div class="month-picker">
+
+        <h2>年月を選択</h2>
+
+
+        <div class="month-picker-selects">
+
+          <label>
+
+            <span>年</span>
+
+            <select id="yearSelect"></select>
+
+          </label>
+
+
+          <label>
+
+            <span>月</span>
+
+            <select id="monthSelect"></select>
+
+          </label>
+
+        </div>
+
+
+        <div class="month-picker-actions">
+
+          <button
+            id="monthPickerCancel"
+            type="button"
+          >
+            キャンセル
+          </button>
+
+          <button
+            id="monthPickerGo"
+            type="button"
+          >
+            移動
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         カテゴリ選択
+    ========================== -->
+
+    <div
+      id="categorySheet"
+      class="category-sheet-overlay"
+      hidden
+    >
+
+      <div
+        class="category-sheet"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="categorySheetTitle"
+      >
+
+        <div
+          class="category-sheet-handle"
+          aria-hidden="true"
+        ></div>
+
+
+        <div class="category-sheet-header">
+
+          <h2 id="categorySheetTitle">
+            カテゴリを選択
+          </h2>
+
+
+          <button
+            id="categorySheetClose"
+            class="category-sheet-close"
+            type="button"
+            aria-label="カテゴリ選択を閉じる"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <div class="category-sheet-options">
+
+          <button
+            class="category-sheet-option selected"
+            type="button"
+            data-category="all"
+          >
+
+            <span
+              class="category-sheet-check"
+              aria-hidden="true"
+            >
+              ✓
+            </span>
+
+            <span class="category-sheet-option-label">
+              すべて
+            </span>
+
+          </button>
+
+
+          <button
+            class="category-sheet-option"
+            type="button"
+            data-category="youtube"
+          >
+
+            <span
+              class="category-sheet-check"
+              aria-hidden="true"
+            ></span>
+
+            <span class="category-sheet-option-label">
+
+              <span class="dot youtube-dot"></span>
+
+              <span>YouTube</span>
+
+            </span>
+
+          </button>
+
+
+          <button
+            class="category-sheet-option"
+            type="button"
+            data-category="member_diary"
+          >
+
+            <span
+              class="category-sheet-check"
+              aria-hidden="true"
+            ></span>
+
+            <span class="category-sheet-option-label">
+
+              <span class="dot fc-dot"></span>
+
+              <span>Member Diary</span>
+
+            </span>
+
+          </button>
+
+
+          <button
+            class="category-sheet-option"
+            type="button"
+            data-category="movie"
+          >
+
+            <span
+              class="category-sheet-check"
+              aria-hidden="true"
+            ></span>
+
+            <span class="category-sheet-option-label">
+
+              <span class="dot fc-dot"></span>
+
+              <span>Movie</span>
+
+            </span>
+
+          </button>
+
+
+          <button
+            class="category-sheet-option"
+            type="button"
+            data-category="radio"
+          >
+
+            <span
+              class="category-sheet-check"
+              aria-hidden="true"
+            ></span>
+
+            <span class="category-sheet-option-label">
+
+              <span class="dot fc-dot"></span>
+
+              <span>Radio</span>
+
+            </span>
+
+          </button>
+
+
+          <button
+            class="category-sheet-option"
+            type="button"
+            data-category="photo"
+          >
+
+            <span
+              class="category-sheet-check"
+              aria-hidden="true"
+            ></span>
+
+            <span class="category-sheet-option-label">
+
+              <span class="dot fc-dot"></span>
+
+              <span>Photo</span>
+
+            </span>
+
+          </button>
+
+
+          <button
+            class="category-sheet-option"
+            type="button"
+            data-category="message"
+          >
+
+            <span
+              class="category-sheet-check"
+              aria-hidden="true"
+            ></span>
+
+            <span class="category-sheet-option-label">
+
+              <span class="dot fc-dot"></span>
+
+              <span>Message</span>
+
+            </span>
+
+          </button>
+
+
+          <button
+            class="category-sheet-option"
+            type="button"
+            data-category="schedule"
+          >
+
+            <span
+              class="category-sheet-check"
+              aria-hidden="true"
+            ></span>
+
+            <span class="category-sheet-option-label">
+
+              <span class="dot schedule-dot"></span>
+
+              <span>Schedule</span>
+
+            </span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- =========================
+       下部ナビゲーション
+  ========================== -->
+
+  <nav
+    id="bottomNav"
+    class="bottom-nav"
+  >
+
+    <button
+      id="calendarNavButton"
+      class="nav-item active"
+      type="button"
+    >
+
+      <span>CALENDAR</span>
+
+    </button>
+
+
+    <button
+      id="exploreNavButton"
+      class="nav-item"
+      type="button"
+    >
+
+      <span>EXPLORE</span>
+
+    </button>
+
+  </nav>
+
+
+  <!--
+    キャッシュ対策。
+    app.jsを変更したときは
+    このバージョン番号も変更する。
+  -->
+
+  <script src="app.js?v=20260930-4"></script>
+
+</body>
+
+</html>
